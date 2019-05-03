@@ -39,6 +39,14 @@ function Navbar() {
               Search
             </Link>
           </li>
+          <li className="nav-item">
+            <Link
+              to="/beers"
+              className={window.location.pathname === "/beers" ? "nav-link active" : "nav-link"}
+            >
+              Beer
+            </Link>
+          </li>
         </ul>
       </div>
     </nav>
