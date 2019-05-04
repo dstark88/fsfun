@@ -22,7 +22,7 @@ class Beers extends Component {
   };
 
   componentDidMount() {
-    this.loadBeers()
+    // this.loadBeers()
   }
 
   loadBeers = () => {
@@ -52,33 +52,27 @@ class Beers extends Component {
 
   handleFormSubmit = event => {
     event.preventDefault();
-    // if (this.state.search)
-    // API.getBrand({
-    //   id: this.state.id,
-    //   name: this.state.name,
-    //   likes: this.state.likes,
-    // })
-
-    if (this.state.search)
-      return axios({
-        url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/",
-        method: "get",
-
-      })
-      .then(res => {
-        console.log("search");
-        console.log("data ", this.state.search);
-        // for (var i)
-        // this.setState({ results: res.data.message});
-       })
-     .catch(err => (err));
+    return axios({
+      url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/",
+      method: "get",
+      data: {
+        id: "",
+        name: "",
+        likes: ""
+      },
+    })
+    .then(res => {
+      this.setState({ beers: res.data, name: "", likes: ""})
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   }
 
   render() {
     return (
       <Container fluid>
         <Row>
-
           <Col size="md-6">
               <h1>Beer in Juliette' Cooler</h1>
             {this.state.beers.length ? (
@@ -97,8 +91,9 @@ class Beers extends Component {
               <h3>No Results to Display</h3>
             )}
           </Col>
+          <Col size="md-6">
             <Row>
-              <Col size="md-6">
+              <Col size="md-12">
               <h1>Search Beer Here:</h1>
                 <SearchForm
                   handleFormSubmit={this.handleFormSubmit}
@@ -112,7 +107,7 @@ class Beers extends Component {
               </Col>
             </Row>
             <Row>
-              <Col size="md-6">
+              <Col size="md-12">
                   <h1>Add a Beer:</h1>
                 <form>
                   <Input 
@@ -130,7 +125,7 @@ class Beers extends Component {
                 </form>
               </Col>
             </Row>
-
+          </Col>
         </Row>
 
       </Container>
