@@ -75,14 +75,10 @@ class Beers extends Component {
             // this.setState({ brand: res.data[i].name })
             console.log("name/brand: ", this.state.brand);
             console.log("res in second one: ", res.data);
-            this.setState({ brand: res.data[i], name: "", likes: "" })
+            this.setState({ beers: res.data, name: "", likes: "" })
           })
         } 
       }
-
-      // console.log("name/brand: ", this.state.brand);
-      //   console.log("res: ", res.data[5]);
-      // this.setState({ beers: res.data[5] })
     })
     .catch(function (error) {
       console.log(error);
@@ -139,8 +135,9 @@ class Beers extends Component {
                   handleSearchSubmit={this.handleSearchSubmit}
                   handleInputChange={this.handleInputChange}
                   brands={this.state.brands}
+                  beer={this.state.beers}
                 />
-               
+                <SearchResults results={this.state.results} />
               </Col>
             </Row>
             <Row>
