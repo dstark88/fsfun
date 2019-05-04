@@ -16,5 +16,9 @@ export default {
   // Saves a book to the database
   saveBook: function(bookData) {
     return axios.post("/api/books", bookData);
+  },
+
+  breedList: function() {
+    return axios.get("https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/");
   }
 };

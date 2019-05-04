@@ -22,9 +22,9 @@ class Beers extends Component {
   };
 
   componentDidMount() {
-    // this.loadBeers()
+    this.loadBeers()
   }
-
+// Get all
   loadBeers = () => {
     return axios({
       url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/",
@@ -50,11 +50,51 @@ class Beers extends Component {
     });
   };
 
-  handleFormSubmit = event => {
+// Get 1 search
+  handleSearchSubmit = event => {
     event.preventDefault();
     return axios({
       url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/",
       method: "get",
+      data: {
+        name: "",
+      },
+    })
+    .then(res => {
+      for(var i =0; i < res.data.length; i++) {
+        console.log("res.data[i]: ", res.data[i]);
+        if (res.data[i].name === this.state.brand) {
+          return axios({
+            url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/" + res.data[i].id,
+            method: "get",
+            data: {
+              name: "",
+            },
+          })
+          .then(res => {
+            // this.setState({ brand: res.data[i].name })
+            console.log("name/brand: ", this.state.brand);
+            console.log("res in second one: ", res.data);
+            this.setState({ brand: res.data[i], name: "", likes: "" })
+          })
+        } 
+      }
+
+      // console.log("name/brand: ", this.state.brand);
+      //   console.log("res: ", res.data[5]);
+      // this.setState({ beers: res.data[5] })
+    })
+    .catch(function (error) {
+      console.log(error);
+    });    
+  }
+
+// Post new beer
+  handleFormSubmit = event => {
+    event.preventDefault();
+    return axios({
+      url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/",
+      method: "post",
       data: {
         id: "",
         name: "",
@@ -96,14 +136,11 @@ class Beers extends Component {
               <Col size="md-12">
               <h1>Search Beer Here:</h1>
                 <SearchForm
-                  handleFormSubmit={this.handleFormSubmit}
+                  handleSearchSubmit={this.handleSearchSubmit}
                   handleInputChange={this.handleInputChange}
                   brands={this.state.brands}
                 />
-                  <datalist id="brand">
-                    {this.state.brands.map(brand => <option key={brand}>{brand}</option>)}
-                  </datalist>
-                <SearchResults results={this.state.results} />
+               
               </Col>
             </Row>
             <Row>
