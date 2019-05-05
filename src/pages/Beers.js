@@ -5,20 +5,16 @@ import { Input, FormBtn } from "../components/Form";
 import SearchForm from "../components/SearchForm";
 import SearchResults from "../components/SearchResults";
 import axios from 'axios';
-// import API from "../utils/API";
-
 
 class Beers extends Component {
   state = {
     search: "",
     brands: [],
     results: [],
-    error: "",
     id: "",
     name: "",
     likes: "",
     beers: [],
-    newBeer: "",
   };
 
   componentDidMount() {
@@ -63,7 +59,7 @@ class Beers extends Component {
     .then(res => {
       for(var i =0; i < res.data.length; i++) {
         console.log("res.data[i]: ", res.data[i]);
-        if (res.data[i].name === this.state.brand) {
+        if (res.data[i].name.includes(this.state.brand)) {
           return axios({
             url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/" + res.data[i].id,
             method: "get",
@@ -72,9 +68,6 @@ class Beers extends Component {
             },
           })
           .then(res => {
-            // this.setState({ brand: res.data[i].name })
-            console.log("name/brand: ", this.state.brand);
-            console.log("res in second one: ", res.data);
             this.setState({ beers: res.data, name: "", likes: "" })
           })
         } 
@@ -88,7 +81,6 @@ class Beers extends Component {
 // Post new beer
   handleFormSubmit = event => {
     event.preventDefault();
-    // console.log("enter field: ", this.state.name)
 ;    return axios({
       url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/",
       method: "post",
@@ -104,6 +96,43 @@ class Beers extends Component {
     .catch(function (error) {
       console.log(error);
     });
+  }
+// add or delete likes
+  handleLike = event => {
+    event.preventDefault();
+    return axios({
+      url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/",
+      method: "get",
+      data: {
+        name: "",
+      },
+    })
+    .then(res => {
+      for(var i =0; i < res.data.length; i++) {
+        // console.log("res.data[i]: ", res.data[i]);
+        if (res.data[i].name === this.state.brand) {
+          return axios({
+            url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/" + res.data[i].id,
+            method: "put",
+            data: {
+              name: "",
+              likes: "",
+            },
+          })
+          .then(res => {
+            console.log("like: ", res.data);
+
+            // this.setState({ brand: res.data[i].name })
+            // console.log("name/brand: ", this.state.brand);
+            // console.log("res in second one: ", res.data);
+            // this.setState({ beers: res.data, name: "", likes: "" })
+          })
+        } 
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });    
   }
 
   render() {
@@ -121,6 +150,22 @@ class Beers extends Component {
                         {beer.name} with {beer.likes} likes
                       </strong>
                     </a>
+                    <p>
+                    <button 
+                        data-action="like" 
+                        type="button" 
+                        className="btn btn-primary mr-2"
+                        onClick={this.handleLike}>
+                        Like
+                    </button>
+                    <button 
+                        data-action="dislike" 
+                        type="button" 
+                        className="btn btn-secondary"
+                        onClick={this.handleLike}>
+                        Dislike
+                    </button>
+                </p>
                   </ListItem>
                 ))}
               </List>
