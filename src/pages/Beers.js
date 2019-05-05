@@ -88,17 +88,18 @@ class Beers extends Component {
 // Post new beer
   handleFormSubmit = event => {
     event.preventDefault();
-    return axios({
+    // console.log("enter field: ", this.state.name)
+;    return axios({
       url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/",
       method: "post",
       data: {
-        id: "",
-        name: "",
-        likes: ""
+        name: this.state.name,
+        likes: "1"
       },
     })
     .then(res => {
-      this.setState({ beers: res.data, name: "", likes: ""})
+      this.setState({ beers: res.data })
+      this.loadBeers()
     })
     .catch(function (error) {
       console.log(error);
