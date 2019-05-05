@@ -3,7 +3,7 @@ import { Col, Row, Container } from "../components/Grid";
 import { List, ListItem } from "../components/List";
 import { Input, FormBtn } from "../components/Form";
 import SearchForm from "../components/SearchForm";
-import SearchResults from "../components/SearchResults";
+import LikeForm from "../components/LikeForm";
 import axios from 'axios';
 
 class Beers extends Component {
@@ -58,7 +58,7 @@ class Beers extends Component {
     })
     .then(res => {
       for(var i =0; i < res.data.length; i++) {
-        console.log("res.data[i]: ", res.data[i]);
+        // console.log("res.data[i]: ", res.data[i]);
         if (res.data[i].name.includes(this.state.brand)) {
           return axios({
             url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/" + res.data[i].id,
@@ -90,15 +90,16 @@ class Beers extends Component {
       },
     })
     .then(res => {
-      this.setState({ beers: res.data })
+      this.setState({ beers: res.data })   
       this.loadBeers()
     })
     .catch(function (error) {
       console.log(error);
     });
   }
-// add or delete likes
-  handleLike = event => {
+
+  // Update likes
+  handleLikeSubmit = event => {
     event.preventDefault();
     return axios({
       url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/",
@@ -109,23 +110,18 @@ class Beers extends Component {
     })
     .then(res => {
       for(var i =0; i < res.data.length; i++) {
-        // console.log("res.data[i]: ", res.data[i]);
-        if (res.data[i].name === this.state.brand) {
+        if (res.data[i].name.includes(this.state.brand)) {
+          console.log("res.data[i]: ", res.data[i].likes);
           return axios({
             url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/" + res.data[i].id,
             method: "put",
             data: {
-              name: "",
-              likes: "",
+              likes: ++res.data[i].likes,
             },
           })
           .then(res => {
-            console.log("like: ", res.data);
-
-            // this.setState({ brand: res.data[i].name })
-            // console.log("name/brand: ", this.state.brand);
-            // console.log("res in second one: ", res.data);
             // this.setState({ beers: res.data, name: "", likes: "" })
+            this.loadBeers()
           })
         } 
       }
@@ -140,7 +136,10 @@ class Beers extends Component {
       <Container fluid>
         <Row>
           <Col size="md-6">
-              <h1>Beer in Juliette' Cooler</h1>
+            <h1>Beer in Juliette' Cooler</h1>
+            <button type="submit" onClick={this.loadBeers} className="btn btn-success">
+              All Beers
+            </button>
             {this.state.beers.length ? (
               <List>
                 {this.state.beers.map(beer => (
@@ -149,23 +148,7 @@ class Beers extends Component {
                       <strong>
                         {beer.name} with {beer.likes} likes
                       </strong>
-                    </a>
-                    <p>
-                    <button 
-                        data-action="like" 
-                        type="button" 
-                        className="btn btn-primary mr-2"
-                        onClick={this.handleLike}>
-                        Like
-                    </button>
-                    <button 
-                        data-action="dislike" 
-                        type="button" 
-                        className="btn btn-secondary"
-                        onClick={this.handleLike}>
-                        Dislike
-                    </button>
-                </p>
+                    </a> 
                   </ListItem>
                 ))}
               </List>
@@ -183,7 +166,6 @@ class Beers extends Component {
                   brands={this.state.brands}
                   beer={this.state.beers}
                 />
-                <SearchResults results={this.state.results} />
               </Col>
             </Row>
             <Row>
@@ -205,9 +187,26 @@ class Beers extends Component {
                 </form>
               </Col>
             </Row>
+            <Row>
+              <Col size="md-12">
+              <h1>Like A Beer Here:</h1>
+                <LikeForm
+                  handleLikeSubmit={this.handleLikeSubmit}
+                  handleInputChange={this.handleInputChange}
+                  brands={this.state.brands}
+                  beer={this.state.beers}
+                />
+                <button id="like" className="btn btn-primary" onClick={this.handleLikeSubmit}>
+                  Likes
+                </button>
+                  {" "}
+                <button id="dislike" className="btn btn-danger" onClick={this.handleLikeSubmit}>
+                  Dislikes
+                </button> 
+              </Col>
+            </Row>
           </Col>
         </Row>
-
       </Container>
     );
   }
