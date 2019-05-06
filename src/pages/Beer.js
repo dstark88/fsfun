@@ -6,7 +6,7 @@ import SearchForm from "../components/SearchForm";
 import LikeForm from "../components/LikeForm";
 import axios from 'axios';
 
-class Beers extends Component {
+class Beer extends Component {
   state = {
     search: "",
     brands: [],
@@ -59,7 +59,7 @@ class Beers extends Component {
     .then(res => {
       for(var i =0; i < res.data.length; i++) {
         // console.log("res.data[i]: ", res.data[i]);
-        if (res.data[i].name.includes(this.state.brand)) {
+        if (res.data[i].name.toLowerCase().includes(this.state.brand.toLowerCase())) {
           return axios({
             url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/" + res.data[i].id,
             method: "get",
@@ -68,7 +68,7 @@ class Beers extends Component {
             },
           })
           .then(res => {
-            this.setState({ beers: res.data, name: "", likes: "" })
+            this.setState({ beers: res.data, name: "", likes: ""})
           })
         } 
       }
@@ -110,7 +110,7 @@ class Beers extends Component {
     })
     .then(res => {
       for(var i =0; i < res.data.length; i++) {
-        if (res.data[i].name.includes(this.state.brand)) {
+        if (res.data[i].name.toLowerCase().includes(this.state.brand.toLowerCase())) {
           console.log("res.data[i]: ", res.data[i].likes);
           return axios({
             url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/" + res.data[i].id,
@@ -142,7 +142,7 @@ class Beers extends Component {
     })
     .then(res => {
       for(var i =0; i < res.data.length; i++) {
-        if (res.data[i].name.includes(this.state.brand)) {
+        if (res.data[i].name.toLowerCase().includes(this.state.brand.toLowerCase())) {
           console.log("res.data[i]: ", res.data[i].likes);
           return axios({
             url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/" + res.data[i].id,
@@ -162,15 +162,15 @@ class Beers extends Component {
     });    
   }
   
-
   render() {
     return (
+      <div>
       <Container fluid>
         <Row>
           <Col size="md-6">
-            <h1>Beer in Juliette' Cooler</h1>
+            <h1 style={{ marginTop: 20 }}>Beer in Juliette's Cooler</h1>
             <button type="submit" style={{ marginBottom: 10 }} onClick={this.loadBeers} className="btn btn-success">
-              All Beers
+              All Beer
             </button>
             {this.state.beers.length ? (
               <List>
@@ -189,9 +189,8 @@ class Beers extends Component {
             )}
           </Col>
           <Col size="md-6">
-            <Row>
+            <Row style={{ marginTop: 40 }}>
               <Col size="md-12">
-              <h1>Search Beer Here:</h1>
                 <SearchForm
                   handleSearchSubmit={this.handleSearchSubmit}
                   handleInputChange={this.handleInputChange}
@@ -229,18 +228,19 @@ class Beers extends Component {
                   beer={this.state.beers}
                 />
                 <button className="btn btn-primary" onClick={this.handleLikeSubmit}>
-                  Likes
+                  Like
                 </button>
                 <button className="btn btn-danger" onClick={this.handleDislikeSubmit}>
-                  Dislikes
+                  Dislike
                 </button> 
               </Col>
             </Row>
           </Col>
         </Row>
       </Container>
+      </div>
     );
   }
 }
 
-export default Beers;
+export default Beer;

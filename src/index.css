@@ -11,3 +11,7 @@ div[data-reactroot] {
   padding: 0;
   margin: 0;
 }
+
+body {
+  background: #B8B8B8;
+}
