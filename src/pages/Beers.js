@@ -120,7 +120,6 @@ class Beers extends Component {
             },
           })
           .then(res => {
-            // this.setState({ beers: res.data, name: "", likes: "" })
             this.loadBeers()
           })
         } 
@@ -131,13 +130,46 @@ class Beers extends Component {
     });    
   }
 
+  // Update dislikes
+  handleDislikeSubmit = event => {
+    event.preventDefault();
+    return axios({
+      url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/",
+      method: "get",
+      data: {
+        name: "",
+      },
+    })
+    .then(res => {
+      for(var i =0; i < res.data.length; i++) {
+        if (res.data[i].name.includes(this.state.brand)) {
+          console.log("res.data[i]: ", res.data[i].likes);
+          return axios({
+            url: "https://cors-anywhere.herokuapp.com/https://beer.fluentcloud.com/v1/beer/" + res.data[i].id,
+            method: "put",
+            data: {
+              likes: --res.data[i].likes,
+            },
+          })
+          .then(res => {
+            this.loadBeers()
+          })
+        } 
+      }
+    })
+    .catch(function (error) {
+      console.log(error);
+    });    
+  }
+  
+
   render() {
     return (
       <Container fluid>
         <Row>
           <Col size="md-6">
             <h1>Beer in Juliette' Cooler</h1>
-            <button type="submit" onClick={this.loadBeers} className="btn btn-success">
+            <button type="submit" style={{ marginBottom: 10 }} onClick={this.loadBeers} className="btn btn-success">
               All Beers
             </button>
             {this.state.beers.length ? (
@@ -196,11 +228,10 @@ class Beers extends Component {
                   brands={this.state.brands}
                   beer={this.state.beers}
                 />
-                <button id="like" className="btn btn-primary" onClick={this.handleLikeSubmit}>
+                <button className="btn btn-primary" onClick={this.handleLikeSubmit}>
                   Likes
                 </button>
-                  {" "}
-                <button id="dislike" className="btn btn-danger" onClick={this.handleLikeSubmit}>
+                <button className="btn btn-danger" onClick={this.handleDislikeSubmit}>
                   Dislikes
                 </button> 
               </Col>

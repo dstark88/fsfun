@@ -1,10 +1,8 @@
 import React from "react";
-// import Counter from "../Counter";
-import "./style.css";
 
 function LikeForm(props) {
   return (
-    <form className="search">
+    <form className="like">
       <div className="form-group">
         <input
           value={props.search}
@@ -14,7 +12,6 @@ function LikeForm(props) {
           className="form-control"
           placeholder="Type in a beer brand to update likes"
         />
-        {/* <Counter /> */}
       </div>
     </form>
   );

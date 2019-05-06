@@ -1,9 +1,9 @@
-form.search {
+form.like {
   overflow: auto;
   margin-bottom: 10px;
 }
 
-form.search button[type="submit"] {
-  float: right;
-  margin-top: 10px;
+form.like button[type="submit"] {
+  float: left;
+  margin-top: 15px;
 }
