@@ -1,14 +1,15 @@
-### Beer Coding Challenge
+## Beer Coding Challenge
 
-## Live Page
-https://fsfun-das.herokuapp.com/beer
+### Live Page
+https://fsfun-das.herokuapp.com
 
-## GitHub Link
+### GitHub Link
 https://github.com/dstark88/fsfun
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 run:
+### `npm install`
 ### `npm start`
 
 Runs the app in the development mode.<br>
